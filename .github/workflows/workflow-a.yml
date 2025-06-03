@@ -1,0 +1,28 @@
+name: Workflow A
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run some task
+      run: echo "Running tasks in Workflow A"
+
+    - name: Set output
+      id: set_output
+      run: echo "::set-output name=workflow_b_input::Hello from Workflow A"
+
+    - name: Trigger Workflow B
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        event-type: trigger-workflow-b
+        client-payload: '{"input": "${{ steps.set_output.outputs.workflow_b_input }}"}'
