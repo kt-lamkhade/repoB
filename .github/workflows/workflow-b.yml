@@ -1,0 +1,16 @@
+name: Workflow B
+
+on:
+  repository_dispatch:
+    types: [trigger-workflow-b]
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Receive input from Workflow A
+      run: echo "Received input: ${{ github.event.client_payload.input }}"
